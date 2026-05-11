@@ -1,0 +1,112 @@
+graph:
+  id: ''
+  description: ''
+  log_level: DEBUG
+  is_majority_voting: false
+  nodes:
+    - id: simple_html_creator_design
+      type: agent
+      config:
+        name: ollama-qwen
+        provider: openai
+        role: you are a wonderful game designer. design a simple one page html game based on human demand. design for detail, tell next agent how to implement. design full functions, human will paly with fun. action, sound, keys.
+        base_url: http://192.168.11.100:4000/v1
+        api_key: ${API_KEY}
+        params: {}
+        tooling: []
+        thinking: null
+        memories: []
+        skills: null
+        retry: null
+      description: ''
+      context_window: -1
+      log_output: true
+    - id: simple_html_creator_develop
+      type: agent
+      config:
+        name: ollama-qwen
+        provider: openai
+        role: you are a simple html game developer. develop a game based on the detail of game design, output single html file. you can use vue.js, tailwindcss.
+        base_url: http://192.168.11.100:4000/v1
+        api_key: AIzaSyACjihoPynqKWGJrjdrR4cfwfkLqbE8qfA
+        params: {}
+        tooling: []
+        thinking: null
+        memories: []
+        skills: null
+        retry: null
+      description: ''
+      context_window: -1
+      log_output: true
+    - id: simple_html_creator_review
+      type: agent
+      config:
+        name: ollama-qwen
+        provider: openai
+        role: review the code, make sure it can run without error, and all details in design were implemented. if you find any problem, show detail, tell the developer to fix it.
+        base_url: http://192.168.11.100:4000/v1
+        api_key: AIzaSyACjihoPynqKWGJrjdrR4cfwfkLqbE8qfA
+        params: {}
+        tooling: []
+        thinking: null
+        memories: []
+        skills: null
+        retry: null
+      description: ''
+      context_window: -1
+      log_output: true
+  edges:
+    - from: simple_html_creator_develop
+      to: simple_html_creator_review
+      trigger: true
+      condition:
+        type: function
+        config:
+          name: 'true'
+      carry_data: true
+      keep_message: false
+      clear_context: false
+      clear_kept_context: false
+      process: null
+      dynamic: null
+    - from: simple_html_creator_review
+      to: simple_html_creator_develop
+      trigger: true
+      condition:
+        type: function
+        config:
+          name: 'true'
+      carry_data: true
+      keep_message: false
+      clear_context: false
+      clear_kept_context: false
+      process: null
+      dynamic: null
+    - from: simple_html_creator_design
+      to: simple_html_creator_develop
+      trigger: true
+      condition:
+        type: function
+        config:
+          name: 'true'
+      carry_data: true
+      keep_message: false
+      clear_context: false
+      clear_kept_context: false
+      process: null
+      dynamic: null
+  initial_instruction: ''
+  start:
+    - simple_html_creator_design
+  end: []
+  memory:
+    - name: simple_html_creator_memory
+      type: file
+      config:
+        file_sources:
+          - path: memoy/
+            file_types: []
+            recursive: true
+            encoding: utf-8
+        index_path: ''
+        embedding: null
