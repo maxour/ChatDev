@@ -4,23 +4,6 @@ graph:
   log_level: DEBUG
   is_majority_voting: false
   nodes:
-    - id: simple_html_creator_design
-      type: agent
-      config:
-        name: ollama-qwen
-        provider: openai
-        role: you are a wonderful game designer. design a simple one page html game based on human demand. design for detail, tell next agent how to implement. design full functions, human will paly with fun. action, sound, keys.
-        base_url: http://192.168.11.100:4000/v1
-        api_key: ${API_KEY}
-        params: {}
-        tooling: []
-        thinking: null
-        memories: []
-        skills: null
-        retry: null
-      description: ''
-      context_window: -1
-      log_output: true
     - id: simple_html_creator_develop
       type: agent
       config:
@@ -43,9 +26,33 @@ graph:
       config:
         name: ollama-qwen
         provider: openai
-        role: review the code, make sure it can run without error, and all details in design were implemented. if you find any problem, show detail, tell the developer to fix it.
+        role: |-
+          You are a strict and senior Code Reviewer. Your ONLY job is to review the code provided by the developer.
+          CRITICAL RULES:
+          1. DO NOT write or rewrite the code yourself.
+          2. DO NOT output any code blocks (like ```html or ```python).
+          3. If you find problems, provide a clear, bulleted text list of the issues and instruct the developer on how to fix them.
+          4. If the code is perfect and has no bugs, simply reply with the exact word "APPROVED".
+          review the code, make sure it can run without error, and all details in design were implemented.
         base_url: http://192.168.11.100:4000/v1
         api_key: AIzaSyACjihoPynqKWGJrjdrR4cfwfkLqbE8qfA
+        params: {}
+        tooling: []
+        thinking: null
+        memories: []
+        skills: null
+        retry: null
+      description: ''
+      context_window: -1
+      log_output: true
+    - id: simple_html_creator_design
+      type: agent
+      config:
+        name: gemini-3-flash-preview
+        provider: gemini
+        role: you are a wonderful game designer. design a simple one page html game based on human demand. you can use HTML5 canvas, CDN vue.js, tailwindcss, web materials. design for detail, design full functions, key board, characters, sounds, actions, make sure human will play with fun. DO NOT output any code, only output design document in detail !
+        base_url: https://generativelanguage.googleapis.com
+        api_key: AIzaSyCGQLjIuQIKTUT_Tij5Mf-iysJjrPebEWQ
         params: {}
         tooling: []
         thinking: null
